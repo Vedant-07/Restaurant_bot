@@ -5,6 +5,11 @@ const ReviewSchema = new mongoose.Schema({
   review: String
 });
 
+const MenuSchema = new mongoose.Schema({
+  name:  String,
+  price: Number
+}, { _id: true });
+
 const RestaurantSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: String,
@@ -18,7 +23,7 @@ const RestaurantSchema = new mongoose.Schema({
   approx_cost_for_two_people: Number,
   cuisines: [String],
   dish_liked: [String],
-  menu_item: [String],
+  menu_item: [MenuSchema],
   listed_in_city: String,
   listed_in_type: String,
   reviews_list: [ReviewSchema]

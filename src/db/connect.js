@@ -2,13 +2,21 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 async function connectToDB() {
+  try {
     const MONGO_URI = process.env.MONGODB_URI;
+    if (!MONGO_URI) {
+      throw new Error("❌ MONGODB_URI is not defined in environment variables.");
+    }
+
     await mongoose.connect(MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        dbName: "zomato-restaurant-data", // 👈 ensure this matches your actual DB name
+      dbName: "zomato-restaurant-data", 
     });
+
     console.log("✅ Connected to MongoDB");
+  } catch (err) {
+    console.error("❌ Error connecting to MongoDB:", err);
+    throw err; 
+  }
 }
 
 module.exports = connectToDB;

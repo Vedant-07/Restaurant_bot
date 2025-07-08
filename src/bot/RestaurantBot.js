@@ -5,10 +5,16 @@ class RestaurantBot extends ActivityHandler {
         super();
 
         this.onMessage(async (context, next) => {
-            const userMessage = context.activity.text;
-            const result = await dialogHandler.handleMessage(userMessage);
+            const userMessage = context.activity.text?.trim();
+    
+            if (!userMessage) {
+                await context.sendActivity("I didn't catch that. Could you please type something?");
+            } else {
+                const result = await dialogHandler.handleMessage(userMessage);
+                await context.sendActivity(result);
+            }
 
-            await context.sendActivity(result);
+
             await next();
         });
 

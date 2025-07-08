@@ -1,31 +1,44 @@
 const express = require("express");
-const { BotFrameworkAdapter } = require("botbuilder");
-const connectToDB = require("./db/connect");
-const RestaurantBot = require("./bot/RestaurantBot");
-const { handleMessage } = require("./bot/dialogHandler");
+const path    = require("path");
+const connectDB = require("./db/connect");    // your existing connection
+const chatRouter = require("./routes/chat");
 require("dotenv").config();
+const cors = require('cors');
+const restaurantDetail = require("./routes/restaurantDetail");
+const ordersRouter= require('./routes/orders'); 
+const reservationsRouter= require('./routes/reservation'); 
 
 const app = express();
-const PORT = process.env.PORT || 3978;
+const PORT = process.env.PORT || 8000;
 
-// Setup Bot Adapter
-const adapter = new BotFrameworkAdapter({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword
-});
+// JSON + static
+app.use(express.json());
+//app.use(express.static(path.join(__dirname, "..", "public")));
+//app.use(express.static("public"));
+//app.use(cors()); // 👈 Enable for all origins
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
-// Setup Bot
-const myBot = new RestaurantBot({ handleMessage });
 
-// Listen for incoming messages
-app.post("/api/messages", (req, res) => {
-    adapter.processActivity(req, res, async (context) => {
-        await myBot.run(context);
+
+// API
+app.use("/api/chat", chatRouter);
+
+
+app.use("/api/restaurant", restaurantDetail);
+
+app.use('/api/orders', ordersRouter);
+
+app.use('/api/reservations', reservationsRouter)
+
+// Start
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`✅ Server listening on http://localhost:${PORT}`);
     });
-});
-
-// Start Server
-app.listen(PORT, async () => {
-    await connectToDB();
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-});
+  })
+  .catch(err => {
+    console.error("❌ DB failed to connect:", err);
+  });
