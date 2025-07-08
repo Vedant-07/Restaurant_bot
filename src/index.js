@@ -11,13 +11,11 @@ const reservationsRouter= require('./routes/reservation');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// JSON + static
+
 app.use(express.json());
-//app.use(express.static(path.join(__dirname, "..", "public")));
-//app.use(express.static("public"));
-//app.use(cors()); // 👈 Enable for all origins
+
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: ['https://restaurant-bot-frontend.vercel.app', 'http://localhost:3000']
 }));
 
 
