@@ -1,8 +1,9 @@
+// delete this bot folder 
 const axios = require("axios");
 
 const endpoint = process.env.AZURE_ENDPOINT;
-const key      = process.env.AZURE_KEY;
-const project  = process.env.PROJECT_NAME;
+const key = process.env.AZURE_KEY;
+const project = process.env.PROJECT_NAME;
 const deployment = process.env.DEPLOYMENT_NAME;
 
 async function analyzeMessage(text) {
@@ -13,21 +14,21 @@ async function analyzeMessage(text) {
       conversationItem: {
         id: "1",
         participantId: "user",
-        text
-      }
+        text,
+      },
     },
     parameters: {
       projectName: project,
       deploymentName: deployment,
-      verbose: true
-    }
+      verbose: true,
+    },
   };
 
   const resp = await axios.post(url, body, {
     headers: {
       "Ocp-Apim-Subscription-Key": key,
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   return resp.data.result.prediction;

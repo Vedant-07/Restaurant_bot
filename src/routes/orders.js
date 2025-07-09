@@ -1,4 +1,3 @@
-// src/routes/orders.js
 const express = require('express');
 const Order   = require('../models/Order');
 const router  = express.Router();
@@ -18,9 +17,6 @@ router.post('/', async (req, res) => {
   const total   = items.reduce((sum,i) => sum + i.price * i.quantity, 0);
   const history = [{ status: 'Received' }];
 
-  // const order = await Order.create({
-  //   restaurantId, items, total, email, orderType, history
-  // });
   const order = await Order.create({
     restaurantId,
     items,
@@ -43,7 +39,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/orders/:id  — fetch order status & history
+// GET /api/orders/:id  — fetch order status & history ,TODO:improve the history feature
 router.get('/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id, 'restaurantId items total email status history createdAt');
@@ -82,5 +78,52 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+// DELETE /api/orders/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await Order.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Order not found' });
+    res.json({ success: true });
+  } catch (err) {
+    console.error("❌ DELETE /api/orders/:id", err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-module.exports = router;
+// helper for chat listing
+async function handleListForChat(req, res) {
+  const email = req.body.email;
+  if (!email) {
+    //  return a special JSON
+    return res.json({ type: 'AskEmail', object: 'orders' });
+  }
+
+  const orders = await Order.find({ email }).sort('-createdAt').limit(10);
+  if (!orders.length) {
+    return res.json({ type: 'ManageOrders', orders: [] });
+  }
+
+  return res.json({
+    type: 'ManageOrders',
+    orders: orders.map(o => ({
+      id:        o._id,
+      placedAt:  o.createdAt.toISOString(),
+      total:     o.total,
+      status:    o.status,
+      orderType: o.orderType,
+      items:     o.items.map(i => ({
+        menuItemId: i.menuItemId.toString(),
+        name:       i.name,
+        price:      i.price,
+        quantity:   i.quantity
+      }))
+    }))
+  });
+  
+}
+
+module.exports = {
+  router,
+  handleListForChat
+};
+
