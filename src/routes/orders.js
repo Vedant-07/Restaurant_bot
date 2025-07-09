@@ -5,7 +5,7 @@ const router  = express.Router();
 // POST /api/orders  — place a new order
 router.post('/', async (req, res) => {
   try {
-    const { restaurantId, items, email, orderType } = req.body;
+    const { restaurantId, items, email, orderType,address } = req.body;
   if (!restaurantId || !items?.length || !email || !orderType) {
     return res.status(400).json({ error: 'restaurantId, items[], email & orderType required' });
   }
