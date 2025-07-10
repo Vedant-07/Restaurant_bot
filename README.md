@@ -7,7 +7,6 @@ A conversational restaurant assistant built with MERN stack and Azure Conversati
 - ⭐ Read customer reviews  
 - 📱 Place pickup & delivery orders  
 - 🗓️ Make, view, modify & cancel reservations  
-- ⏳ Track order status (for now its automated through “Received → Preparing → … → Delivered” )
 - 💳 Make mock payments (for now there's no real transactions)  
 
 Frontend deployed on Vercel:  
@@ -19,7 +18,6 @@ Frontend deployed on Vercel:
 
 - **Backend**: Node.js, Express, Mongoose (MongoDB Atlas)   
 - **NLP**: Azure Conversational Language Understanding (CLU)  
-- **Scheduler**: `setInterval`-driven order status automation  
 - **Frontend**: React (CRA), Fetch API  
 - **Deployment**:  
   - Backend → Azure App Service (Linux, Node 20 LTS)  
@@ -186,10 +184,38 @@ Returns: `menu[]`, `reviews[]`
 - `DELETE /api/reservations/:id`
 
 ---
+## 📊 Dataset & Preprocessing
+
+This project uses restaurant data sourced from Kaggle:
+
+**🔗 [Zomato Bangalore Restaurants Dataset](https://www.kaggle.com/datasets/himanshupoddar/zomato-bangalore-restaurants/data)**  
+Credits to [Himanshu Poddar](https://www.kaggle.com/himanshupoddar) for providing the dataset.
+
+### 🧹 Data Cleaning & Normalization
+
+To prepare the dataset for use in the Restaurant Bot, the following preprocessing steps were performed:
+
+- **🧼 Null Value Handling**:  
+  Removed rows with critical missing values (e.g., in menu_items, dish_liked, rating fields, etc. ).
+
+- **🧮 Normalization**:  
+  Standardized categorical fields like `cuisine`, `location`, and `rating` by:
+  - Lowercasing and trimming whitespace   
+  - Parsing numerical values from strings (e.g., approx_cost or rating fields)
+
+- **🧾 Data Structuring**:  
+  Converted the cleaned data into a MongoDB-friendly structure, splitting fields into:
+  - `menu`: array of items with name, price, image (mocked)  
+  - `reviews`: user reviews, ratings  
+
+These preprocessing steps helps to improve the accuracy of search queries and the overall bot experience when using Azure CLU for intent recognition.
+
+---
 
 ## 🎯 Future Improvements
 
-- JWT-based Authentication  
+- JWT-based Authentication
+- Status tracking
 - Stripe/PayPal integration  
 - Push/email notifications  
 - Admin dashboard for analytics  
