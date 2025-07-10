@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const connectDB = require("./db/connect");
 const chatRouter = require("./routes/chat");
 require("dotenv").config();
@@ -35,7 +34,7 @@ app.use("/api/reservations", reservations.router);
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`✅ Server listening on http://localhost:${PORT}`);
+      console.log(`✅ Server listening on Port:${PORT}`);
     });
   })
   .catch((err) => {

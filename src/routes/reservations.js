@@ -18,11 +18,9 @@ router.post("/", async (req, res) => {
     } = req.body;
 
     if (!restaurantId || !name || !email || !dateTime || !partySize) {
-      return res
-        .status(400)
-        .json({
-          error: "restaurantId, name, email, dateTime & partySize are required",
-        });
+      return res.status(400).json({
+        error: "restaurantId, name, email, dateTime & partySize are required",
+      });
     }
 
     const reservation = await Reservation.create({

@@ -1,4 +1,3 @@
-// delete this bot folder 
 const axios = require("axios");
 
 const endpoint = process.env.AZURE_ENDPOINT;
@@ -7,7 +6,7 @@ const project = process.env.PROJECT_NAME;
 const deployment = process.env.DEPLOYMENT_NAME;
 
 async function analyzeMessage(text) {
-  const url = `${endpoint}/language/:analyze-conversations?api-version=2022-10-01-preview`;
+  const url = `${endpoint}/language/:analyze-conversations?api-version=2024-11-01`;
   const body = {
     kind: "Conversation",
     analysisInput: {

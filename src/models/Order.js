@@ -26,7 +26,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "Received",
-      enum: ["Received", "Preparing", "On the way", "Delivered", "Cancelled"],
+      enum: ["Received", "Preparing", "On the way", "Delivered", "Cancelled"], // TODO: added for status tracking func.
     },
     history: [
       {

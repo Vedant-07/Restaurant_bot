@@ -2,7 +2,6 @@ const express = require("express");
 const { analyzeMessage } = require("../bot/azureClu");
 
 const searchRouter = require("./searchRestaurant");
-const viewMenuRouter = require("./viewMenu");
 const orders = require("./orders");
 const reservations = require("./reservations");
 
@@ -20,9 +19,6 @@ router.post("/", async (req, res) => {
     switch (intent) {
       case "SearchRestaurant":
         return searchRouter.handle(req, res, entities);
-
-      case "ViewMenu":
-        return viewMenuRouter.handle(req, res, entities);
 
       case "ManageOrders":
         // pass along user email in req.body.email ,similar for the reservation
