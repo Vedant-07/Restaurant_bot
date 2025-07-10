@@ -210,6 +210,8 @@ To prepare the dataset for use in the Restaurant Bot, the following preprocessin
 
 These preprocessing steps helps to improve the accuracy of search queries and the overall bot experience when using Azure CLU for intent recognition.
 
+> 📍 **Note**: Since the dataset contains restaurants exclusively from **Bangalore**, search results (based on location) will be limited to areas within Bangalore.
+
 ---
 
 ## 🎯 Future Improvements
